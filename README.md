@@ -10,7 +10,7 @@ Github Action to deploy Sagat player proxy server
 
 ### `aws-region`
 
-**Optional**
+**Optional** AWS region to deploy to (default: eu-west-1)
 
 ### `deploy-package`
 
@@ -22,16 +22,27 @@ Github Action to deploy Sagat player proxy server
 
 ## Example usage
 
+The permissions are needed to interact with GitHub's OIDC Token endpoint. This is on the root of your workflow yaml file
+
+```yaml
+permissions:
+  id-token: write
+  contents: write
+  statuses: write
 ```
-uses: A-dapt/deploy-player@v1.0
+
+The following is an example of how to use this action in a workflow:
+
+```yaml
+uses: a-dapt/deploy-player@v1.0
 with:
-  deploy-package: 'deploy.zip'
+  deploy-package: deploy.zip
   artefact-bucket: ${{ secrets.ADAPT_DEPLOYMENT_ARTEFACTS }}
   role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_ADAPT_CORE_PLATFORM }}
 ```
 
-## TODO (Future versions)
+## Release
 
-- Version artefacts
-- Deploy with capistrano dir layout
-- Detect if deploy failed with aws ssm send-command
+1. To release change version in the `VERSION` file and push branch to the repository
+2. Merge to master
+3. On master, run release make target `make release`
